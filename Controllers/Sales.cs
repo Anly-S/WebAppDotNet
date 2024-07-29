@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApplicationDotNET.Models;
 using WebApplicationDotNET.Services;
 
 namespace WebApplicationDotNET.Controllers
@@ -29,49 +30,46 @@ namespace WebApplicationDotNET.Controllers
         [HttpGet("sales", Name = "GetSales")]
         public IActionResult GetSales()
         {
+            var response = new ApiResponse();
             var sales = _salesService.GetAllSales();
             if (sales == null || !sales.Any())
             {
-                return Ok(new
-                {
-                    status = "fail",
-                    data = (object)null,
-                    count = 0,
-                    error = "No sales found"
-                });
+
+                response.status = "fail";
+                    response.count = 0;
+                    response.error = "No sales found";
+                    return NotFound(response);
+
             }
 
-            return Ok(new
-            {
-                status = "success",
-                data = sales,
-                count = sales.Count(),
-                error = (string)null
-            });
+            else {
+                response.status = "success";
+                response.data = sales;
+                response.count = sales.Count();
+                    return Ok(response);
+            };
         }
 
         [HttpDelete("delete/{id}", Name = "DeleteSale")]
         public IActionResult DeleteSale(int id)
         {
+            var response = new ApiResponse();
             var deleted = _salesService.DeleteSale(id);
             if (!deleted)
             {
-                return NotFound(new
-                {
-                    status = "fail",
-                    data = (object)null,
-                    count = 0,
-                    error = "Sale not found"
-                });
+                response.status = "fail";
+                response.count = 0;
+                response.error = "Sale not found";
+                return NotFound(response);
             }
 
-            return Ok(new
+            else
             {
-                status = "success",
-                data = (object)null,
-                count = 0,
-                error = (string)null
-            });
+                response.status = "success";
+                response.count = 0;
+                return Ok(response);
+
+            }
         }
     }
 }

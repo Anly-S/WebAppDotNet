@@ -30,3 +30,4 @@ C:\Users\anly.s\source\repos\WebApplicationDotNET\WebApplicationDotNET\obj\Debug
 C:\Users\anly.s\source\repos\WebApplicationDotNET\WebApplicationDotNET\obj\Debug\net8.0\WebApplicationDotNET.pdb
 C:\Users\anly.s\source\repos\WebApplicationDotNET\WebApplicationDotNET\obj\Debug\net8.0\WebApplicationDotNET.genruntimeconfig.cache
 C:\Users\anly.s\source\repos\WebApplicationDotNET\WebApplicationDotNET\obj\Debug\net8.0\ref\WebApplicationDotNET.dll
+C:\Users\anly.s\source\repos\WebApplicationDotNET\WebApplicationDotNET\obj\Debug\net8.0\WebApplicationDotNET.sourcelink.json
