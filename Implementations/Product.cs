@@ -84,7 +84,18 @@ namespace WebApplicationDotNET.Implementations
         public void AddProduct(ProductDetails product)
         {
             var products = ReadProductsFromCsv(productsFilePath).ToList();
-            products.Add(product);
+
+            var existingProduct = products.FirstOrDefault(p => p.ProductCode == product.ProductCode);
+
+            if (existingProduct != null)
+            {
+                existingProduct.Stock += product.Stock;
+            }
+            else
+            {
+                products.Add(product);
+            }
+
             WriteProductsToCsv(productsFilePath, products);
         }
 

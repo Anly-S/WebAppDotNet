@@ -50,7 +50,7 @@ namespace WebApplicationDotNET.Controllers
                 _productService.AddProduct(product);
                 {
 
-                    response.status = "fail";
+                    response.status = "success";
                     response.data = product;
                     response.count = 1;
                     return BadRequest(response);
