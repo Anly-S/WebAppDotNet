@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplicationDotNET.Services;
 using WebApplicationDotNET.Implementations;
 using WebApplicationDotNET.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplicationDotNET.Controllers
 {
@@ -42,7 +41,7 @@ namespace WebApplicationDotNET.Controllers
         }
 
         [HttpPost("add", Name = "AddProduct")]
-        public IActionResult AddProduct([FromBody] ProductService.ProductDetails product)
+        public IActionResult AddProduct([FromBody] ProductDetails product)
         {
             var response = new ApiResponse();
             try
@@ -64,8 +63,42 @@ namespace WebApplicationDotNET.Controllers
             }
         }
 
+
+        [HttpPost("buy", Name = "BuyProduct")]
+        public IActionResult BuyProduct([FromBody] BuyProductRequest request)
+        {
+            var response = new ApiResponse();
+
+            try
+            {
+                var product = _productService.BuyProduct(request.ProductCode, request.Quantity);
+
+                if (product != null)
+                {
+                    response.status = "success";
+                    response.data = product;
+                    response.count = 1;
+                    return Ok(response);
+                }
+                else
+                {
+                    response.status = "fail";
+                    response.error = "Product not found or insufficient stock.";
+                    return BadRequest(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.status = "fail";
+                response.error = ex.Message;
+                return BadRequest(response);
+            }
+        }
+
+
+
         [HttpPut("update", Name = "UpdateProduct")]
-        public IActionResult UpdateProduct([FromBody] ProductService.ProductDetails product)
+        public IActionResult UpdateProduct([FromBody] ProductDetails product)
         {
             var response = new ApiResponse();
             var updated = _productService.UpdateProduct(product);

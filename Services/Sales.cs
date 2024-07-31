@@ -1,5 +1,5 @@
 ﻿
-using static WebApplicationDotNET.Implementations.Sales;
+using WebApplicationDotNET.Models;
 
 namespace WebApplicationDotNET.Services
 {
@@ -7,5 +7,6 @@ namespace WebApplicationDotNET.Services
     {
          IEnumerable<SalesDetails> GetAllSales();
         bool DeleteSale(int id);
+        void RecordSales(SalesDetails sale);
     }
 }

@@ -1,20 +1,12 @@
 ﻿
 using System.Globalization;
 using WebApplicationDotNET.Services;
+using WebApplicationDotNET.Models;
 
 namespace WebApplicationDotNET.Implementations
 {
     public class Sales : ISalesService
     {
-        public class SalesDetails
-        {
-            public int Id { get; set; }
-            public DateTime Timestamp { get; set; }
-            public string ProductCode { get; set; }
-            public string ProductName { get; set; }
-            public int Quantity { get; set; }
-            public decimal Price { get; set; }
-        }
 
         private readonly string salesFilePath = "C:\\Users\\anly.s\\source\\repos\\ProductStoreApp\\ProductStoreApp\\sales.csv";
         private readonly ILogger<Sales> _logger;
@@ -107,5 +99,12 @@ namespace WebApplicationDotNET.Implementations
             WriteSalesToCsv(salesFilePath, _sales);
             return true;
         }
+
+        public void RecordSales(SalesDetails sale)
+        {
+            _sales.Add(sale);
+            WriteSalesToCsv(salesFilePath, _sales);
+        }
+
     }
 }

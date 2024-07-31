@@ -1,5 +1,4 @@
-﻿using WebApplicationDotNET.Implementations;
-using static WebApplicationDotNET.Implementations.ProductService;
+﻿using  WebApplicationDotNET.Models;
 
 namespace WebApplicationDotNET.Services
 {
@@ -7,6 +6,7 @@ namespace WebApplicationDotNET.Services
     {
         IEnumerable<ProductDetails> GetAllProducts();
         void AddProduct(ProductDetails product);
+        ProductDetails BuyProduct(string productCode,int quantity);
         bool UpdateProduct(ProductDetails product);
         bool DeleteProduct(string productCode);
     }

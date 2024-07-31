@@ -1,24 +1,19 @@
 ﻿
 using WebApplicationDotNET.Services;
+using WebApplicationDotNET.Models;
 
 namespace WebApplicationDotNET.Implementations
 {
     public class ProductService : IProductService
     {
-        public class ProductDetails
-        {
-            public string ProductCode { get; set; }
-            public string ProductName { get; set; }
-            public decimal Price { get; set; }
-            public int Stock { get; set; }
-        }
-
         private readonly string productsFilePath = "C:\\Users\\anly.s\\source\\repos\\ProductStoreApp\\ProductStoreApp\\products.csv";
         private readonly ILogger<ProductService> _logger;
+        private readonly ISalesService _salesService;
 
-        public ProductService(ILogger<ProductService> logger)
+        public ProductService(ILogger<ProductService> logger, ISalesService salesService)
         {
             _logger = logger;
+            _salesService = salesService;
         }
 
         private IEnumerable<ProductDetails> ReadProductsFromCsv(string filePath)
@@ -98,6 +93,41 @@ namespace WebApplicationDotNET.Implementations
 
             WriteProductsToCsv(productsFilePath, products);
         }
+
+        public ProductDetails BuyProduct(string productCode, int quantity)
+        {
+            var products = ReadProductsFromCsv(productsFilePath).ToList();
+            var foundProduct = products.FirstOrDefault(p => p.ProductCode == productCode);
+
+            if (foundProduct != null)
+            {
+                if (foundProduct.Stock >= quantity)
+                {
+                    foundProduct.Stock -= quantity;
+                    var sale = new SalesDetails
+                    {
+                        Id = _salesService.GetAllSales().Count() + 1,
+                        Timestamp = DateTime.Now,
+                        ProductCode = foundProduct.ProductCode,
+                        ProductName = foundProduct.ProductName,
+                        Quantity = quantity,
+                        Price = foundProduct.Price * quantity
+                    };
+
+                    _salesService.RecordSales(sale);
+                    WriteProductsToCsv(productsFilePath, products);
+                    return foundProduct;
+             
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
 
         public bool UpdateProduct(ProductDetails product)
         {
