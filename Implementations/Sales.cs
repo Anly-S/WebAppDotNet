@@ -8,7 +8,7 @@ namespace WebApplicationDotNET.Implementations
     public class Sales : ISalesService
     {
 
-        private readonly string salesFilePath = "C:\\Users\\anly.s\\source\\repos\\ProductStoreApp\\ProductStoreApp\\sales.csv";
+        private readonly string salesFilePath = "C:\\Users\\anly.s\\source\\repos\\WebApplicationDotNET\\WebApplicationDotNET\\DataFiles\\sales.csv";
         private readonly ILogger<Sales> _logger;
         private List<SalesDetails> _sales;
 
@@ -92,6 +92,7 @@ namespace WebApplicationDotNET.Implementations
             var sale = _sales.FirstOrDefault(s => s.Id == id);
             if (sale == null)
             {
+                _logger.LogWarning("Attempted to delete non-existent sale with ID: {Id}", id);
                 return false;
             }
 
@@ -99,6 +100,7 @@ namespace WebApplicationDotNET.Implementations
             WriteSalesToCsv(salesFilePath, _sales);
             return true;
         }
+
 
         public void RecordSales(SalesDetails sale)
         {

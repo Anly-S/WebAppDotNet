@@ -1,4 +1,5 @@
 using WebApplicationDotNET.Implementations;
+using WebApplicationDotNET.Interfaces;
 using WebApplicationDotNET.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISalesService, Sales>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,9 +36,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseCors("AllowAllOrigins");
+
+app.UseAuthorization();
 
 app.MapControllers();
 

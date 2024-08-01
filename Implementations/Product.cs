@@ -1,12 +1,11 @@
-﻿
-using WebApplicationDotNET.Services;
+﻿using WebApplicationDotNET.Services;
 using WebApplicationDotNET.Models;
 
 namespace WebApplicationDotNET.Implementations
 {
     public class ProductService : IProductService
     {
-        private readonly string productsFilePath = "C:\\Users\\anly.s\\source\\repos\\ProductStoreApp\\ProductStoreApp\\products.csv";
+        private readonly string productsFilePath = "C:\\Users\\anly.s\\source\\repos\\WebApplicationDotNET\\WebApplicationDotNET\\DataFiles\\products.csv";
         private readonly ILogger<ProductService> _logger;
         private readonly ISalesService _salesService;
 
@@ -79,7 +78,6 @@ namespace WebApplicationDotNET.Implementations
         public void AddProduct(ProductDetails product)
         {
             var products = ReadProductsFromCsv(productsFilePath).ToList();
-
             var existingProduct = products.FirstOrDefault(p => p.ProductCode == product.ProductCode);
 
             if (existingProduct != null)
@@ -117,17 +115,17 @@ namespace WebApplicationDotNET.Implementations
                     _salesService.RecordSales(sale);
                     WriteProductsToCsv(productsFilePath, products);
                     return foundProduct;
-             
                 }
                 else
                 {
+                    _logger.LogWarning("Insufficient stock for product: {ProductCode}", productCode);
                     return null;
                 }
             }
 
+            _logger.LogWarning("Product not found: {ProductCode}", productCode);
             return null;
         }
-
 
         public bool UpdateProduct(ProductDetails product)
         {
@@ -136,6 +134,7 @@ namespace WebApplicationDotNET.Implementations
 
             if (existingProduct == null)
             {
+                _logger.LogWarning("Product not found: {ProductCode}", product.ProductCode);
                 return false;
             }
 
@@ -154,6 +153,7 @@ namespace WebApplicationDotNET.Implementations
 
             if (productToRemove == null)
             {
+                _logger.LogWarning("Product not found: {ProductCode}", productCode);
                 return false;
             }
 
@@ -162,12 +162,9 @@ namespace WebApplicationDotNET.Implementations
             return true;
         }
 
-
         public IEnumerable<ProductDetails> GetAllProducts()
         {
             return ReadProductsFromCsv(productsFilePath);
         }
-
-
     }
 }
